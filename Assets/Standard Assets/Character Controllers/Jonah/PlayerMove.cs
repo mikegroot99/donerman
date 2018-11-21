@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class PlayerMove : MonoBehaviour {
 
     [SerializeField] private string HorizontalInputName;
-    [SerializeField] private string VertitalInputName;
+    [SerializeField] private string VerticalInputName;
     private float MovementSpeed;
 
     [SerializeField] private float WalkSpeed, RunSpeed;
-    // [SerializeField] private float RunBuildupSpeed;
+    //[SerializeField] private float RunBuildupSpeed;
     [SerializeField] private KeyCode SprintKey;
     [SerializeField] private KeyCode IsMoving;
 
@@ -32,15 +32,15 @@ public class PlayerMove : MonoBehaviour {
     }
 
     void Update()
-    { 
-        //checkIfStaminaIsEmpty();
+    {
+        checkIfStaminaIsEmpty();
         PlayerMovement();      
     }
 
     private void PlayerMovement()
     {
         float horizInput = Input.GetAxis(HorizontalInputName);
-        float vertInput = Input.GetAxis(VertitalInputName);
+        float vertInput = Input.GetAxis(VerticalInputName);
 
         Vector3 forwardMovement = transform.forward * vertInput;
         Vector3 rightMovement = transform.right * horizInput;
@@ -51,33 +51,33 @@ public class PlayerMove : MonoBehaviour {
 
     private void SetMovementSpeed()
     {
-        if (Input.GetKey(IsMoving) && Input.GetKey(SprintKey) /*&& isEmpty != true*/)
+        if (Input.GetKey(IsMoving) && Input.GetKey(SprintKey) && isEmpty != true)
         {
             MovementSpeed = Mathf.Lerp(MovementSpeed, RunSpeed, 0.5f);
-            //maxStamina -= staminaLoss * Time.deltaTime;
-            //StaminaBar.value = maxStamina;
-         //   currentSpeed.text = "Running " + MovementSpeed;
-            
+            maxStamina -= staminaLoss * Time.deltaTime;
+            StaminaBar.value = maxStamina;
+            //   currentSpeed.text = "Running " + MovementSpeed;
+
         }
         else 
         {
-            //maxStamina += staminaGain * Time.deltaTime;
-            //StaminaBar.value = maxStamina;
+            maxStamina += staminaGain * Time.deltaTime;
+            StaminaBar.value = maxStamina;
             MovementSpeed = Mathf.Lerp(MovementSpeed, WalkSpeed, 0.5f);
         //    currentSpeed.text = "Walking " + MovementSpeed;
 
         }
     }
 
-    //public bool checkIfStaminaIsEmpty()
-    //{
-    //    if (StaminaBar.value <= 1.0f)
-    //    {
-    //        return isEmpty = true;
-    //    }
-    //    else
-    //    {
-    //        return isEmpty = false;
-    //    }
-    //}
+    public bool checkIfStaminaIsEmpty()
+    {
+        if (StaminaBar.value <= 1.0f)
+        {
+            return isEmpty = true;
+        }
+        else
+        {
+            return isEmpty = false;
+        }
+    }
 }
