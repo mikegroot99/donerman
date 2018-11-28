@@ -15,6 +15,11 @@ public class PlayerMove : MonoBehaviour {
     [SerializeField] private KeyCode IsMoving;
 
     public Text currentSpeed;
+    private Rigidbody rb; 
+
+    // Pick ups
+    public Text PickUpTotal;
+    private int PickUpCount = 1; 
 
     //Stamina bar
     public Slider StaminaBar;
@@ -27,11 +32,12 @@ public class PlayerMove : MonoBehaviour {
     private CharacterController CharController;
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         CharController = GetComponent<CharacterController>();
         StaminaBar.maxValue = maxStamina;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         checkIfStaminaIsEmpty();
         PlayerMovement();      
@@ -56,7 +62,7 @@ public class PlayerMove : MonoBehaviour {
             MovementSpeed = Mathf.Lerp(MovementSpeed, RunSpeed, 0.5f);
             maxStamina -= staminaLoss * Time.deltaTime;
             StaminaBar.value = maxStamina;
-            //   currentSpeed.text = "Running " + MovementSpeed;
+            // currentSpeed.text = "Running " + MovementSpeed;
 
         }
         else 
@@ -64,9 +70,19 @@ public class PlayerMove : MonoBehaviour {
             maxStamina += staminaGain * Time.deltaTime;
             StaminaBar.value = maxStamina;
             MovementSpeed = Mathf.Lerp(MovementSpeed, WalkSpeed, 0.5f);
-        //    currentSpeed.text = "Walking " + MovementSpeed;
+            // currentSpeed.text = "Walking " + MovementSpeed;
 
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag ( "Pick Up"))
+        {
+            other.gameObject.SetActive(false);
+            PickUpTotal.text = "Doners verslonden: " + PickUpCount++; 
+        }
+
     }
 
     public bool checkIfStaminaIsEmpty()
